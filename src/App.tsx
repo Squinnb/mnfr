@@ -1,24 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Menu from './components/Menu';
+import Register from './components/Register';
+
+export interface Drink {
+  id: string;
+  name: string;
+  price: number;
+  count: number;
+}
+
+
 
 function App() {
+  const [order, setOrder] = useState<Array<Drink>>([
+    {id: "coffee", name: "コーヒー", price: 480, count: 0},
+    {id: "tea", name: "紅茶", price: 480, count: 0},
+    {id: "milk", name: "ミルク", price: 480, count: 0},
+    {id: "cola", name: "コーラ", price: 480, count: 0},
+    {id: "beer", name: "ビール", price: 480, count: 0}
+  ])
+
+  const addDrink = (index: number) => {
+    setOrder(
+      (oldOrder) => {
+        const newOrder = [...oldOrder];
+        newOrder[index] = {...newOrder[index], count: newOrder[index].count+1}
+        return newOrder;
+      }
+      )
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{margin: "25px"}}>
+      <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+        <Menu addDrink={addDrink} drinks={order}/>
+        <Register order={order} />
+      </div>
     </div>
   );
 }
